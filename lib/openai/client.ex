@@ -2,6 +2,8 @@ defmodule OpenAI.Client do
   @moduledoc false
   alias OpenAI.Config
   use HTTPoison.Base
+  
+  @timeout 15000
 
   def process_url(url), do: Config.api_url() <> url
 
@@ -44,7 +46,7 @@ defmodule OpenAI.Client do
 
   def api_get(url) do
     url
-    |> get(request_headers())
+    |> get(request_headers(), [recv_timeout: @timeout])
     |> handle_response()
   end
 
@@ -56,7 +58,7 @@ defmodule OpenAI.Client do
       |> elem(1)
 
     url
-    |> post(body, request_headers())
+    |> post(body, request_headers(), [recv_timeout: @timeout])
     |> handle_response()
   end
 end
